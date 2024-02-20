@@ -20,4 +20,16 @@ export class resumeService {
       status: createdResume.status
     };
   };
+
+  // 이력서 목록 조회
+  findResumes = async () => {
+    const resumes = await this.resumeRepository.findResumes();
+
+    // 이력서를 작성 일자로 내림차순
+    resumes.sort((a, b) => {
+      return b.createdAt - a.createdAt;
+    });
+
+    return resumes;
+  };
 }
