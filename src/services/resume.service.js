@@ -32,4 +32,25 @@ export class resumeService {
 
     return resumes;
   };
+
+  // 이력서 상세 조회
+  findResumeById = async (resumeId) => {
+    const resume = await this.resumeRepository.findResumeById(resumeId);
+
+    return {
+      resumeId: resume.resumeId,
+      title: resume.title,
+      content: resume.content,
+      status: resume.status,
+      createdAt: resume.createdAt,
+      updatedAt: resume.updatedAt,
+      users: {
+        select: {
+          name: true
+        }
+      }
+    };
+  };
+
+  // 이력서 수정
 }
