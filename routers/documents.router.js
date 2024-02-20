@@ -6,9 +6,9 @@ const router = express.Router();
 
 // 이력서 생성 API
 router.post("/resume", authMiddleware, async (req, res, next) => {
-  const { userId } = req.user; 
+  const { userId } = req.user;
   const { title, content, status = "APPLY" } = req.body;
-  
+
   const Statuses = ["APPLY", "DROP", "PASS", "INTERVIEW1", "INTERVIEW2", "FINAL_PASS"];
   if (!Statuses.includes(status)) {
     return res.status(409).json({
@@ -18,7 +18,7 @@ router.post("/resume", authMiddleware, async (req, res, next) => {
   const resume = await prisma.resume.create({
     data: {
       userId: +userId, //
-      title, 
+      title,
       content,
       status
     }

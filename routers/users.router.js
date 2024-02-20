@@ -59,15 +59,14 @@ router.post("/sign-in", async (req, res, next) => {
   return res.status(200).json({ message: "로그인에 성공하였습니다." });
 });
 
-
 // 내 정보 조회 api
-router.get('/me', authMiddleware, (req, res) => {
+router.get("/me", authMiddleware, (req, res) => {
   const user = req.body;
   return res.json({
-      email: user.email,
-      name: user.name,
-      message: '회원 조회가 확인되었습니다.'
-  })
-})
+    email: user.email,
+    name: user.name,
+    message: "회원 조회가 확인되었습니다."
+  });
+});
 
 export default router;
