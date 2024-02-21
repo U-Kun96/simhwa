@@ -1,4 +1,4 @@
-import { resumeRepository } from "../repositories/resume.repository";
+// import { resumeRepository } from "../repositories/resume.repository";
 
 export class resumeService {
   constructor(resumeRepository) {
@@ -83,6 +83,10 @@ export class resumeService {
     // resumeId로 찾을 이력서를 찾지 못한 경우에 오류를 던져주기
     if (!resume) {
       throw new Error("존재하지 않는 이력서입니다.");
+    }
+
+    if (userId !== resume.userId) {
+      throw new Error("작성자가 다릅니다.");
     }
     // 이력서를 찾았으면 저장소에 삭제를 요청한다
     await this.resumeRepository.deleteResume(resumeId, userId);

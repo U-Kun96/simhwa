@@ -6,6 +6,7 @@ import UsersRouter from "./routers/users.router.js";
 import ErrorHandlingMiddleware from "./middlewares/error-handling.middleware.js";
 import LogMiddleware from "./middlewares/log.middleware.js";
 import documentsRouter from "./routers/documents.router.js";
+import { resumeController } from "./src/controllers/resume.controller.js";
 
 const app = express();
 const PORT = 3018;
