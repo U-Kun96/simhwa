@@ -39,5 +39,32 @@ export class resumeController {
     } catch (err) {
       next(err);
     }
+
+    // 이력서 수정
+    updateResume = async (req, res, next) => {
+      try {
+        const { resumeId } = req.params;
+        const { userId } = req.user;
+        const { title, content, status } = req.body;
+        // 해당하는 이력서 찾기
+        const resume = await this.resumeService.findResumeById(resumeId);
+        // 이력서 생성자와 수정자가 같지 않으면 에러 던지기
+        if (userId !== resume.userId) {
+          throw new Error("userId가 일치하지 않습니다.");
+        }
+
+        // 동일한 사람이면 저장소에 이력서 수정을 요청함
+        const updatedResume = await this.resumeService.updateResume(
+          resumeId,
+          title,
+          content,
+          status
+        );
+
+        return res.status(200).json({ data: updatedResume });
+      } catch (err) {
+        next(err);
+      }
+    };
   };
 }
