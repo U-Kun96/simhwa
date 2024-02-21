@@ -76,4 +76,24 @@ export class resumeService {
   };
 
   // 이력서 삭제
+  deleteResume = async (userId, resumeId) => {
+    // 삭제할 이력서를 resumeId로 찾기
+    const resume = await this.resumeRepository.findResumeById(resumeId);
+
+    // resumeId로 찾을 이력서를 찾지 못한 경우에 오류를 던져주기
+    if (!resume) {
+      throw new Error("존재하지 않는 이력서입니다.");
+    }
+    // 이력서를 찾았으면 저장소에 삭제를 요청한다
+    await this.resumeRepository.deleteResume(resumeId, userId);
+
+    return {
+      resumeId: resume.resumeId,
+      userId: resume.userId,
+      title: resume.title,
+      content: resume.content,
+      createdAt: resume.createdAt,
+      updatedAt: resume.updatedAt
+    };
+  };
 }
