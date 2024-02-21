@@ -12,7 +12,7 @@ export class resumeController {
 
       const createdResume = await this.resumeController.creatResume(userId, title, content, status);
 
-      return res.status(201).json({ createdResume });
+      return res.status(201).json({ data: createdResume });
     } catch (err) {
       next(err);
     }
@@ -21,9 +21,21 @@ export class resumeController {
   // 이력서 목록 조회
   findResumes = async (req, res, next) => {
     try {
-      const resumes = await this.resumeController.findResumes();
+      const resumes = await this.resumeService.findResumes();
 
-      return res.status(200).json({ resumes });
+      return res.status(200).json({ data: resumes });
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  // 이력서 상세 조회
+  findResumesById = async (req, res, next) => {
+    try {
+      const { resumeId } = req.params;
+      const resume = await this.resumeService.findResumeById(resumeId);
+
+      return res.status(200).json({ data: resume });
     } catch (err) {
       next(err);
     }
