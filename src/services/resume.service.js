@@ -1,3 +1,5 @@
+import { resumeRepository } from "../repositories/resume.repository";
+
 export class resumeService {
   constructor(resumeRepository) {
     this.resumeRepository = resumeRepository;
@@ -53,4 +55,25 @@ export class resumeService {
   };
 
   // 이력서 수정
+  updateResume = async (userId, resumeId, title, content, status) => {
+    const resume = await this.resumeRepository.findResumeById(resumeId);
+
+    if (!resume) {
+      throw new Error("존재하지 않는 이력서입니다.");
+    }
+
+    // 검증 완료 후 이력서를 수정한다.
+    const updatedResume = await this.resumeRepository.updateResume(userId, title, content, status);
+
+    return {
+      userId: updatedResume.userId,
+      title: updatedResume.title,
+      content: updatedResume.content,
+      status: updatedResume.status,
+      createdAt: updatedResume.createdAt,
+      updatedAt: updatedResume.updatedAt
+    };
+  };
+
+  // 이력서 삭제
 }
