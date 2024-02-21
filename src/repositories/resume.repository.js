@@ -1,6 +1,6 @@
 // import { prisma } from "../../models/index.js";
 
-export class resumeRepository {
+export class ResumeRepository {
   constructor(prisma) {
     this.prisma = prisma;
   }

@@ -1,6 +1,6 @@
 // import { resumeRepository } from "../repositories/resume.repository";
 
-export class resumeService {
+export class ResumeService {
   constructor(resumeRepository) {
     this.resumeRepository = resumeRepository;
   }

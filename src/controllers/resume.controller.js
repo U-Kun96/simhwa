@@ -1,5 +1,5 @@
 // import { resumeService } from "../services/resume.service.js"; // 객체일 때 {} = 밸류값만
-export class resumeController {
+export class ResumeController {
   constructor(resumeService) {
     this.resumeService = resumeService;
   }
