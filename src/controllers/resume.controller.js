@@ -9,6 +9,10 @@ export class resumeController {
     try {
       const { userId } = req.body;
       const { title, content, status = "APPLY" } = req.body;
+
+      const createdResume = await this.resumeController.creatResume(userId, title, content, status);
+
+      return res.status(201).json({ createdResume });
     } catch (err) {
       next(err);
     }
