@@ -24,8 +24,8 @@ export class ResumeService {
   };
 
   // 이력서 목록 조회
-  findResumes = async () => {
-    const resumes = await this.resumeRepository.findResumes();
+  findResumes = async (sort) => {
+    const resumes = await this.resumeRepository.findResumes(sort);
 
     // 이력서를 작성 일자로 내림차순
     resumes.sort((a, b) => {

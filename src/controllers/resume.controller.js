@@ -1,4 +1,5 @@
-// import { resumeService } from "../services/resume.service.js"; // 객체일 때 {} = 밸류값만
+import jwt from "jsonwebtoken";
+
 export class ResumeController {
   constructor(resumeService) {
     this.resumeService = resumeService;
@@ -21,7 +22,19 @@ export class ResumeController {
   // 이력서 목록 조회
   findResumes = async (req, res, next) => {
     try {
-      const resumes = await this.resumeService.findResumes();
+      const { orderKey, orderValue } = req.query;
+      let orderBy = {};
+
+      if (orderKey) {
+        orderBy[orderKey] = orderValue && orderValue.toUpperCase() === "ASC" ? "asc" : "desc";
+      } else {
+        orderBy = { createdAt: "desc" };
+      }
+
+      const resumes = await this.findResumes({
+        orderKey,
+        orderValue: orderValue.toLowerCase()
+      });
 
       return res.status(200).json({ data: resumes });
     } catch (err) {
@@ -30,15 +43,17 @@ export class ResumeController {
   };
 
   // 이력서 상세 조회
-  findResumesById = async (req, res, next) => {
-    try {
-      const { resumeId } = req.params;
-      const resume = await this.resumeService.findResumeById(resumeId);
+  // findResumesById = async (req, res, next) => {
+  //   try {
+  //     const { resumeId } = req.params;
+  //     const resume = await this.resumeService.findResumeById(resumeId);
 
-      return res.status(200).json({ data: resume });
-    } catch (err) {
-      next(err);
-    }
+  //     return res.status(200).json({ data: resume });
+  //   } catch (err) {
+  //     next(err);
+  //   }
+
+  // 해설 영상 참고 이력서 상세 조회
 
     // 이력서 수정
     updateResume = async (req, res, next) => {

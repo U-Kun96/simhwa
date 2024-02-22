@@ -1,6 +1,7 @@
 import express from "express";
 import { prisma } from "../models/index.js";
 import authMiddleware from "../middlewares/auth.middleware.js";
+import findResumes from "../src/controllers/resume.controller.js";
 
 const router = express.Router();
 
@@ -27,55 +28,10 @@ router.post("/resume", authMiddleware, async (req, res, next) => {
 });
 
 /** 이력서 목록 조회 API **/
-router.get("/resume", authMiddleware, async (req, res, next) => {
-  const { orderKey, orderValue } = req.query;
-  let orderBy = {};
-  if (orderKey) {
-    orderBy[orderKey] = orderValue && orderValue.toUpperCase() === "ASC" ? "asc" : "desc";
-  } else {
-    orderBy = { createdAt: "desc" };
-  }
-  const resume = await prisma.resume.findMany({
-    select: {
-      resumeId: true,
-      userId: true,
-      title: true,
-      content: true,
-      status: true,
-      createdAt: true,
-      updatedAt: true,
-      users: {
-        select: {
-          name: true
-        }
-      }
-    },
-    orderBy
-  });
-  return res.status(200).json({ data: resume });
-});
+router.get("/resume", authMiddleware, findResumes);
+
 /** 이력서 상세 조회 API **/
-router.get("/resume/:resumeId", authMiddleware, async (req, res, next) => {
-  const { resumeId } = req.params;
-  const resume = await prisma.resume.findFirst({
-    where: { resumeId: +resumeId },
-    select: {
-      resumeId: true,
-      //   userId: true,
-      title: true,
-      content: true,
-      status: true,
-      createdAt: true,
-      updatedAt: true,
-      users: {
-        select: {
-          name: true
-        }
-      }
-    }
-  });
-  return res.status(200).json({ data: resume });
-});
+router.get("/resume/:resumeId", authMiddleware);
 
 //이력서 수정 api
 router.put("/resume/:resumeId", authMiddleware, async (req, res, next) => {

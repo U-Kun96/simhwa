@@ -18,8 +18,29 @@ export class ResumeRepository {
   };
 
   // 이력서 목록 조회
-  findResumes = async () => {
-    const resumes = await this.prisma.resume.findMany({});
+  findResumes = async (sort) => {
+    const resumes = await prisma.resume.findMany({
+      select: {
+        resumeId: true,
+        userId: true,
+        title: true,
+        content: true,
+        status: true,
+        createdAt: true,
+        updatedAt: true,
+        users: {
+          select: {
+            name: true
+          }
+        }
+      },
+      orderBy: [
+        {
+          [sort.orderBy]: sort.orderValue
+        }
+      ]
+    });
+
     return resumes;
   };
 
