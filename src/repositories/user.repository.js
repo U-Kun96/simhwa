@@ -1,7 +1,10 @@
-export class userRepository {
-  constructor(prisma) {
-    this.prisma = prisma;
-  }
+const findOneUserById = async (userId) => {
+  const user = await Prisma.user.findFirst({
+    where: {
+      userId
+    }
+  });
+  return user;
+};
 
-  // 사용자 회원 가입
-}
+export default findOneUserById;
