@@ -4,18 +4,25 @@ export class ResumeRepository {
   constructor(prisma) {
     this.prisma = prisma;
   }
-  // 이력서 생성
-  createResume = async (userId, title, content, status = "APPLY") => {
-    const createdResume = await this.prisma.resume.create({
-      data: {
-        userId,
-        title,
-        content,
-        status
-      }
+
+  // 해설 영상 참고 이력서 생성
+  createResume = async (data) => {
+    await prisma.resume.create({
+      data
     });
-    return createdResume;
   };
+  // // 이력서 생성
+  // createResume = async (userId, title, content, status = "APPLY") => {
+  //   const createdResume = await this.prisma.resume.create({
+  //     data: {
+  //       userId,
+  //       title,
+  //       content,
+  //       status
+  //     }
+  //   });
+  //   return createdResume;
+  // };
 
   // 이력서 목록 조회
   findResumes = async (sort) => {

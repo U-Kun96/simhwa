@@ -5,18 +5,33 @@ export class ResumeController {
     this.resumeService = resumeService;
   }
 
-  // 이력서 생성
-  creatResume = async (req, res, next) => {
-    try {
-      const { userId } = req.body;
-      const { title, content, status = "APPLY" } = req.body;
+  // // 이력서 생성
+  // creatResume = async (req, res, next) => {
+  //   try {
+  //     const { userId } = req.body;
+  //     const { title, content, status = "APPLY" } = req.body;
 
-      const createdResume = await this.resumeController.creatResume(userId, title, content, status);
+  //     const createdResume = await this.resumeController.creatResume(userId, title, content, status);
 
-      return res.status(201).json({ data: createdResume });
-    } catch (err) {
-      next(err);
+  //     return res.status(201).json({ data: createdResume });
+  //   } catch (err) {
+  //     next(err);
+  //   }
+  // };
+
+  // 해설영상 참고 이력서 생성
+  createResume = async (req, res, next) => {
+    const { userId } = req.user;
+    const { title, content, status = "APPLY" } = req.body;
+
+    const Statuses = ["APPLY", "DROP", "PASS", "INTERVIEW1", "INTERVIEW2", "FINAL_PASS"];
+    if (!Statuses.includes(status)) {
+      return res.status(409).json({
+        message: "이력서가 없습니다."
+      });
     }
+
+    return res.status(201).json({ data: resume });
   };
 
   // 이력서 목록 조회

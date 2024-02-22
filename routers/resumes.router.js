@@ -1,37 +1,23 @@
 import express from "express";
 import { prisma } from "../models/index.js";
 import authMiddleware from "../middlewares/auth.middleware.js";
-import findResumes from "../src/controllers/resume.controller.js";
+import { ResumeController } from "../src/controllers/resume.controller.js";
+import { ResumeService } from "../src/services/resume.service.js";
+import { ResumeRepository } from "../src/repositories/resume.repository.js";
 
 const router = express.Router();
+const resumeController = new ResumeController(resumeService);
+const resumeService = new ResumeService(resumeRepository);
+const resumeRepository = new ResumeRepository(prisma);
 
 // 이력서 생성 API
-router.post("/resume", authMiddleware, async (req, res, next) => {
-  const { userId } = req.user;
-  const { title, content, status = "APPLY" } = req.body;
-
-  const Statuses = ["APPLY", "DROP", "PASS", "INTERVIEW1", "INTERVIEW2", "FINAL_PASS"];
-  if (!Statuses.includes(status)) {
-    return res.status(409).json({
-      message: "이력서가 없습니다."
-    });
-  }
-  const resume = await prisma.resume.create({
-    data: {
-      userId: +userId, //
-      title,
-      content,
-      status
-    }
-  });
-  return res.status(201).json({ data: resume });
-});
+router.post("/resume", authMiddleware, resumeController.createResume);
 
 /** 이력서 목록 조회 API **/
-router.get("/resume", authMiddleware, findResumes);
+router.get("/resume", authMiddleware, resumeController.findResumes);
 
 /** 이력서 상세 조회 API **/
-router.get("/resume/:resumeId", authMiddleware);
+router.get("/resume/:resumeId", authMiddleware, resumeController.findResumeById);
 
 //이력서 수정 api
 router.put("/resume/:resumeId", authMiddleware, async (req, res, next) => {
