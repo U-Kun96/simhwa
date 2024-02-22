@@ -1,4 +1,6 @@
 import jwtwebToken from "jsonwebtoken";
+import findOneUserByUserId from "../repositories/user.repository.js";
+
 const verifyRefreshToken = async (refreshToken) => {
   const token = jwtwebToken.verify(refreshToken, "resume&%*");
 
@@ -10,11 +12,7 @@ const verifyRefreshToken = async (refreshToken) => {
     };
   }
 
-  const user = await Prisma.user.findFirst({
-    where: {
-      userId: token.userId
-    }
-  });
+  const user = await findOneUserByUserId(token.userId);
 
   if (!user) {
     // res는 http를 통해서 넘어오는 값이기 때문에 그대로 사용해서 안된다.
@@ -32,8 +30,11 @@ const verifyRefreshToken = async (refreshToken) => {
     expiresIn: "7d"
   });
 
-  return res.json({
+  // res는 사용할 수 없기 때문에 삭제해줌
+  return {
     accessToken: newAccessToken,
     refreshToken: newRefreshToken
-  });
+  };
 };
+
+export default verifyRefreshToken;

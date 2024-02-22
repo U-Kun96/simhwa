@@ -1,5 +1,7 @@
-const findOneUserById = async (userId) => {
-  const user = await Prisma.user.findFirst({
+import { prisma } from "../models/index.js";
+
+const findOneUserByUserId = async (userId) => {
+  const user = await prisma.user.findFirst({
     where: {
       userId
     }
@@ -7,4 +9,4 @@ const findOneUserById = async (userId) => {
   return user;
 };
 
-export default findOneUserById;
+export default findOneUserByUserId;
