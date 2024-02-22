@@ -39,65 +39,53 @@ export class ResumeService {
   findResumeById = async (resumeId) => {
     const resume = await this.resumeRepository.findResumeById(resumeId);
 
-    return {
-      resumeId: resume.resumeId,
-      title: resume.title,
-      content: resume.content,
-      status: resume.status,
-      createdAt: resume.createdAt,
-      updatedAt: resume.updatedAt,
-      users: {
-        select: {
-          name: true
-        }
-      }
-    };
-  };
-
-  // 이력서 수정
-  updateResume = async (userId, resumeId, title, content, status) => {
-    const resume = await this.resumeRepository.findResumeById(resumeId);
-
-    if (!resume) {
-      throw new Error("존재하지 않는 이력서입니다.");
-    }
-
-    // 검증 완료 후 이력서를 수정한다.
-    const updatedResume = await this.resumeRepository.updateResume(userId, title, content, status);
-
-    return {
-      userId: updatedResume.userId,
-      title: updatedResume.title,
-      content: updatedResume.content,
-      status: updatedResume.status,
-      createdAt: updatedResume.createdAt,
-      updatedAt: updatedResume.updatedAt
-    };
-  };
-
-  // 이력서 삭제
-  deleteResume = async (userId, resumeId) => {
-    // 삭제할 이력서를 resumeId로 찾기
-    const resume = await this.resumeRepository.findResumeById(resumeId);
-
-    // resumeId로 찾을 이력서를 찾지 못한 경우에 오류를 던져주기
-    if (!resume) {
-      throw new Error("존재하지 않는 이력서입니다.");
-    }
-
-    if (userId !== resume.userId) {
-      throw new Error("작성자가 다릅니다.");
-    }
-    // 이력서를 찾았으면 저장소에 삭제를 요청한다
-    await this.resumeRepository.deleteResume(resumeId, userId);
-
-    return {
-      resumeId: resume.resumeId,
-      userId: resume.userId,
-      title: resume.title,
-      content: resume.content,
-      createdAt: resume.createdAt,
-      updatedAt: resume.updatedAt
-    };
+    return resume;
   };
 }
+
+// 이력서 수정
+updateResume = async (userId, resumeId, title, content, status) => {
+  const resume = await this.resumeRepository.findResumeById(resumeId);
+
+  if (!resume) {
+    throw new Error("존재하지 않는 이력서입니다.");
+  }
+
+  // 검증 완료 후 이력서를 수정한다.
+  const updatedResume = await this.resumeRepository.updateResume(userId, title, content, status);
+
+  return {
+    userId: updatedResume.userId,
+    title: updatedResume.title,
+    content: updatedResume.content,
+    status: updatedResume.status,
+    createdAt: updatedResume.createdAt,
+    updatedAt: updatedResume.updatedAt
+  };
+};
+
+// 이력서 삭제
+deleteResume = async (userId, resumeId) => {
+  // 삭제할 이력서를 resumeId로 찾기
+  const resume = await this.resumeRepository.findResumeById(resumeId);
+
+  // resumeId로 찾을 이력서를 찾지 못한 경우에 오류를 던져주기
+  if (!resume) {
+    throw new Error("존재하지 않는 이력서입니다.");
+  }
+
+  if (userId !== resume.userId) {
+    throw new Error("작성자가 다릅니다.");
+  }
+  // 이력서를 찾았으면 저장소에 삭제를 요청한다
+  await this.resumeRepository.deleteResume(resumeId, userId);
+
+  return {
+    resumeId: resume.resumeId,
+    userId: resume.userId,
+    title: resume.title,
+    content: resume.content,
+    createdAt: resume.createdAt,
+    updatedAt: resume.updatedAt
+  };
+};

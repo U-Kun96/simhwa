@@ -48,30 +48,43 @@ export class ResumeRepository {
   findResumeById = async (resumeId) => {
     // findFirst를 사용한 이유: 유니크는 스키마에 @unique로 지정한 필드만 찾을 수 있다고 해서
     const resume = await this.prisma.resume.findFirst({
-      where: { resumeId: +resumeId }
-    });
-
-    return resume;
-  };
-
-  // 이력서 수정
-  updateResume = async (userId, title, content, status) => {
-    const updatedResume = await this.prisma.resume.update({
-      where: { userId: +userId },
-      data: {
-        title,
-        content,
-        status
+      where: { resumeId: +resumeId },
+      select: {
+        resumeId: true,
+        //   userId: true,
+        title: true,
+        content: true,
+        status: true,
+        createdAt: true,
+        updatedAt: true,
+        users: {
+          select: {
+            name: true
+          }
+        }
       }
     });
-    return updatedResume;
-  };
-
-  // 이력서 삭제
-  deleteResume = async (resumeId, userId) => {
-    const deletedResume = await this.prisma.resume.delete({
-      where: { resumeId: +resumeId, userId: +userId }
-    });
-    return deletedResume;
+    return resume;
   };
 }
+
+// 이력서 수정
+updateResume = async (userId, title, content, status) => {
+  const updatedResume = await this.prisma.resume.update({
+    where: { userId: +userId },
+    data: {
+      title,
+      content,
+      status
+    }
+  });
+  return updatedResume;
+};
+
+// 이력서 삭제
+deleteResume = async (resumeId, userId) => {
+  const deletedResume = await this.prisma.resume.delete({
+    where: { resumeId: +resumeId, userId: +userId }
+  });
+  return deletedResume;
+};
